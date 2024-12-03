@@ -2,8 +2,7 @@ import os
 import pandas as pd
 
 # Ruta principal donde buscar las carpetas y archivos CSV
-#path = "data/Enaho"
-path = "D:/Estudio/ENEI/Proyecto integrador/Software/enaho-dashboard/hello-framework/src/data/Enaho"
+path = "../../datasets/ENAHO"
 
 # Columnas para realizar el join
 join_columns = ["AÑO", "MES", "CONGLOME", "VIVIENDA", "HOGAR", "CODPERSO"]
