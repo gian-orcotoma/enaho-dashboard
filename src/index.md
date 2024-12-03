@@ -1,4 +1,5 @@
 ---
+theme: dashboard
 toc: false
 ---
 
@@ -8,33 +9,95 @@ toc: false
   <a href="https://observablehq.com/framework/getting-started">Get started<span style="display: inline-block; margin-left: 0.25rem;">↗︎</span></a>
 </div>
 
-<div class="grid grid-cols-2" style="grid-auto-rows: 504px;">
 
-  <!-- GRÁFICO N° 01PERÚ: PRINCIPALES PROBLEMAS DEL PAÍS -->
-  ```js
-  //const problemas = JSON.parse(FileAttachment("data/grafico1_dataloader.json").text());
-  const problemas = FileAttachment("data/grafico1_dataloader.json").json();
-  ```
+<!-- GRÁFICO N° 01PERÚ: PRINCIPALES PROBLEMAS DEL PAÍS -->
+```js
+//////////////////////////////// Inputs
+const añoInput = Inputs.range([2014, 2024], {label: "Año:", step:1, value:2023});
+const año = Generators.input(añoInput);
 
+const corteInput = Inputs.select(
+  ['TRIMESTRE', 'SEMESTRE', 'FECHA'],
+  {
+    label: "Grupo"
+  }
+);
+const cortes = Generators.input(corteInput);
+
+
+//////////////////////////////// Data
+const problemas = await FileAttachment("data/grafico1_dataloader.json").json();
+
+function filtrarProblemas(dataset, fecha_inicio='0000-00', fecha_fin='9999-99') {
+  let data = dataset['data']
+
+  data = data.filter((registro)=>{
+    registro['FECHA'] >= fecha_inicio &&
+    registro['FECHA'] <= fecha_fin
+  })
+
+  // Generar grupos de meses por año
+  /*
+  let meses_en_grupo = Math.floor(12 / grupos)
+  let datos_agrupados = []
+
+  for (let registro of data){
+    let fecha = registro['AÑO']
+    let grupo = Math.floor((registro['MES'] - 1) / meses_en_grupo) + 1
+    fecha = fecha += grupo.toString().padStart(2, '0')
+
+    let nuevo = registro
+    nuevo['FECHA'] = fecha
+
+    datos_agrupados.push(nuevo)
+  }
+  */
+
+  return data
+}
+
+const problemas_filtrado = filtrarProblemas(problemas, '0000-00', '9999-99')
+
+//////////////////////////////// Grafico
+function mostrarGrafico1(data) {
+  return Plot.plot({
+    width: width,
+    x: {tickRotate: -90},
+    y: {grid: true, label: "Porcentaje"},
+    marks: [
+      Plot.ruleY([0]),
+      Plot.lineY(data, {x: "FECHA", y: "VALOR", stroke:"PREGUNTA_NOM", tip: true}),
+      Plot.text(data, Plot.selectLast({x: "FECHA", y: "VALOR", z: "PREGUNTA_NOM", text: "PREGUNTA_NOM", textAnchor: "start", dx: 3}))
+    ]
+  })
+}
+
+```
+
+<div class="card">
+  <h2>GRÁFICO N° 01 PERÚ: PRINCIPALES PROBLEMAS DEL PAÍS</h2>
+  <h3>Porcentaje</h3>
+
+  <!-- Filtros -->
   <div>
-    
+  ${ resize((width) => añoInput) }
+  ${ resize((width) => corteInput) }
   </div>
 
-  <div class="card">${
-    resize((width) => Plot.plot({
-      title: "GRÁFICO N° 01 PERÚ: PRINCIPALES PROBLEMAS DEL PAÍS",
-      subtitle: "Porcentaje",
-      width,
-      y: {grid: true, label: "Porcentaje"},
-      marks: [
-        Plot.ruleY([0]),
-        Plot.lineY(problemas['data'], {x: "MES", y: "VALOR", tip: true})
-      ]
-    }))
-  }</div>
-
-
+  <!-- Grafico -->
+  <div>
+    ${ resize((width) => mostrarGrafico1(problemas['data'])) }
+  </div>
 </div>
+
+
+
+
+
+
+
+
+
 
 ---
 

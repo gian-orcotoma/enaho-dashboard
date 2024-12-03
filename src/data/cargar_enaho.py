@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 # Ruta principal donde buscar las carpetas y archivos CSV
-path = "../../datasets/ENAHO"
+path = "datasets/ENAHO"
 
 # Columnas para realizar el join
 join_columns = ["AÑO", "MES", "CONGLOME", "VIVIENDA", "HOGAR", "CODPERSO"]
