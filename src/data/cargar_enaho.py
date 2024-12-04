@@ -32,9 +32,11 @@ def cargar_enaho():
                         if all(col in df.columns for col in join_columns):
                             folder_csvs.append(df)
                         else:
-                            print(f"El archivo {file_path} no contiene las columnas requeridas y será ignorado.")
+                            pass
+                            # print(f"El archivo {file_path} no contiene las columnas requeridas y será ignorado.")
                     except Exception as e:
-                        print(f"Error al leer el archivo {file_path}: {e}")
+                        pass
+                        # print(f"Error al leer el archivo {file_path}: {e}")
             
             # Si hay DataFrames en la carpeta, combinarlos
             if folder_csvs:

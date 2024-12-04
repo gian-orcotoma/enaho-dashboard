@@ -27,19 +27,21 @@ preguntas_nombres = [
   'Otro',
   'Ninguno',
 ]
-preguntas_codigos = [f'P2_1${str(n).zfill(2)}' for n in range(1,17-1)]
+
+preguntas_codigos = [f'P2_2${str(n).zfill(2)}' for n in range(1,17-1)]
 problemas = data[
     ['AÑO','MES','CONGLOME', 'VIVIENDA', 'HOGAR', 'CODPERSO'] + preguntas_codigos
 ]
 
 # Si se respondió
-problemas.loc[:, preguntas_codigos] = problemas[preguntas_codigos].replace("0", pd.NA).isna()
+problemas.loc[:, preguntas_codigos] = problemas[preguntas_codigos].applymap(lambda x: 1 if x == "1" else 0)
+#problemas.loc[:, preguntas_codigos] = problemas[preguntas_codigos].applymap(lambda x: 0 if x == " " else 1)
 
 # Factor de expansion
 problemas.loc[:, preguntas_codigos] = problemas[preguntas_codigos].multiply(data.FACTOR07, axis=0)
 
 # Filtrar desde 2014 que es desde cuando se hace la pregunta
-problemas = problemas[problemas['AÑO'] >= 2014]
+# problemas = problemas[problemas['AÑO'] >= 2014]
 
 # Agrupar sumando
 problemas_por_mes = problemas[['AÑO','MES'] + preguntas_codigos].groupby(['AÑO','MES']).sum()
@@ -77,4 +79,4 @@ for idx_pregunta in range(len(preguntas_codigos)):
   dic = problema.to_dict(orient='records')
   problemas_json['data'] += dic
 
-print(json.dumps(problemas_json))
+print(json.dumps(problemas_json['data']))
