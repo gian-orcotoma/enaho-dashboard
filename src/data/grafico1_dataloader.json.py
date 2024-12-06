@@ -30,7 +30,7 @@ preguntas_nombres = [
 
 preguntas_codigos = [f'P2_2${str(n).zfill(2)}' for n in range(1,17-1)]
 problemas = data[
-    ['AÑO','MES','CONGLOME', 'VIVIENDA', 'HOGAR', 'CODPERSO'] + preguntas_codigos
+    ['AÑO','MES','CONGLOME', 'VIVIENDA', 'HOGAR', 'CODPERSO', 'FACTOR07'] + preguntas_codigos
 ]
 
 # Si se respondió
