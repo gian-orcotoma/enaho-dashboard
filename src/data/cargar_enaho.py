@@ -23,6 +23,7 @@ def cargar_enaho():
             # Iterar sobre los archivos dentro de la carpeta
             for file_name in os.listdir(folder_path):
                 if file_name.endswith(".csv"):
+                    print(f"[cargar_enaho] 📊 Cargando {os.join(folder_path, file_name)}")
                     file_path = os.path.join(folder_path, file_name)
                     try:
                         # Leer el archivo CSV
