@@ -26,4 +26,4 @@ jobs:
       - name: Deploy to Observable Cloud
         run: npm run deploy -- --message "$(git log -1 --pretty=%s)"
         env:
-          OBSERVABLE_TOKEN: db0eba267733d99d1920680acedd2eecc5cc28a6
+          OBSERVABLE_TOKEN: ${{ secrets.OBSERVABLE_TOKEN }}
