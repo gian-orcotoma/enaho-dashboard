@@ -5,7 +5,7 @@ import pandas as pd
 path = "datasets/ENAHO"
 
 # Columnas para realizar el join
-join_columns = ["AÑO", "MES", "CONGLOME", "VIVIENDA", "HOGAR", "CODPERSO"]
+join_columns = ["AÑO", "MES", "CONGLOME", "VIVIENDA", "HOGAR", "CODPERSO", "CODINFOR", "UBIGEO", "DOMINIO", "ESTRATO"]
 
 def cargar_enaho():
     # Lista para almacenar los DataFrames resultantes de cada carpeta

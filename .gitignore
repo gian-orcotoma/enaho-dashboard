@@ -2,5 +2,4 @@
 /dist/
 node_modules/
 yarn-error.log
-datasets/*
 observablehq.config.js

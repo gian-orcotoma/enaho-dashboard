@@ -1,9 +1,8 @@
 import pandas as pd
 from cargar_enaho import cargar_enaho
 
-#datos = pd.read_csv('/Users/cynthiacevallos/Downloads/enaho-dashboard-main/datasets/ENAHO/data/Enaho01B-2023-2.csv',encoding='latin-1')
+#datos = pd.read_csv('D:/Estudio/ENEI/Proyecto integrador/Software/enaho-dashboard/datasets/ENAHO/784-Modulo85/Enaho01B-2022-2.csv',encoding='latin-1')
 datos = cargar_enaho()
-
 #datos = datos
 meses = {
     1: "Enero",
@@ -54,10 +53,9 @@ datos1["SEMESTRE"] = datos1["MES"].apply(lambda x: 1 if x <= 6 else 2)
 datos1.loc[:,"TRIMESTRE"] = datos1["AÑO"].astype(str) + '-' + datos1["TRIMESTRE"].astype(str).str.zfill(2)
 datos1.loc[:,"SEMESTRE"] = datos1["AÑO"].astype(str) + '-' + datos1["SEMESTRE"].astype(str).str.zfill(2)
 
-
 # Convertir el DataFrame a JSON con formato 'records'
-datos_json = datos1.to_json(orient='records')
-#print(datos_json)
+datos_json = datos1.to_json(orient='records' )
+print(datos_json)
 # Guardar en un archivo JSON para usar en Observable
 #with open('datos_observable.json', 'w', encoding='utf-8') as file:
  #   file.write(datos_json)

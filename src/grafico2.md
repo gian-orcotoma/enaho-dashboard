@@ -3,8 +3,18 @@ title: grafico2
 theme: glacier
 toc: false
 sql:
-  problemas: data/datos_observable.json
+  problemas: data/grafico2_dataloader.json
 ---
+
+# Dashboard de Percepcion Ciudadana
+<div class="grid grid-cols-4">
+  <div class="card" style="color: inherit;">
+    <h2>Principal problema del país</h2>
+    <span class="big">Corrupción</span>
+  </div>
+</div>
+
+<!-- GRÁFICO N° 01PERÚ: PRINCIPALES PROBLEMAS DEL PAÍS -->
 # Dashboard de Percepcion Ciudadana
 
 <div class="grid grid-cols-4">
@@ -17,17 +27,23 @@ sql:
 
 <!-- GRÁFICO N° 01PERÚ: PRINCIPALES PROBLEMAS DEL PAÍS -->
 ```sql id=problemasFiltrado
-    SELECT B.AÑO,B.MES,B.AÑOMES,B.ZONA,ROUND((B.SUMA_SI/B.TOTAL)*100,2) AS PORCENTAJE_SI
+   SELECT B.AÑO,B.MES,B.AÑOMES,B.ZONA,ROUND((B.SUMA_SI/B.TOTAL)*100,2) AS PORCENTAJE_SI
     FROM (
         SELECT A.AÑO,A.AÑOMES,A.MES,A.ZONA, SUM(CASE WHEN A.PAGO_EXTRA = 'No' OR A.PAGO_EXTRA is NULL THEN A.FACTOR07 ELSE 0 END) SUMA_NO,SUM(CASE WHEN A.PAGO_EXTRA = 'Si' THEN A.FACTOR07 ELSE 0 END) SUMA_SI, A.TOTAL FROM (
             SELECT AÑO,MES AS AÑOMES,MES,CONCAT(AÑO,MES),ZONA,PAGO_EXTRA,FACTOR07,SUM(FACTOR07) OVER (PARTITION BY CONCAT(AÑO,MES_NOMBRE),ZONA) AS TOTAL
             FROM problemas
+            WHERE P23 IS NOT NULL
             ORDER BY AÑO,MES
         ) A 
         GROUP BY A.AÑOMES,A.ZONA,A.TOTAL,A.MES,A.AÑO
     ) B 
     WHERE B.AÑO >= ${year_inicio} AND B.AÑO <= ${year_fin}
     GROUP BY B.AÑOMES,B.ZONA,B.SUMA_SI,B.TOTAL,B.MES,B.AÑO
+    UNION ALL
+    SELECT  AÑO,MES,MES AS AÑOMES,'Total',ROUND((SUM(CASE WHEN PAGO_EXTRA = 'Si' THEN FACTOR07 ELSE 0 END)/SUM(FACTOR07))*100,2) PORCENTAJE_SI
+    FROM problemas                
+    WHERE P23 IS NOT NULL 
+    GROUP BY AÑO,MES,'Total'
 ```
 
 ```js
@@ -64,7 +80,7 @@ function mostrarGrafico1(data) {
       Plot.text(data, {
       x: "MES",
       y: "PORCENTAJE_SI",
-      text: d => d.PORCENTAJE_SI.toFixed(2),
+      text: d => d.PORCENTAJE_SI,
       dx: 9, // Desplazamiento en X
       dy: -9, // Desplazamiento en Y
       fill: "ZONA",
@@ -78,5 +94,5 @@ function mostrarGrafico1(data) {
 <div class="card">
   ${ view(year_inicio_input) }
   ${ view(year_fin_input) }
-  ${ mostrarGrafico1(problemasFiltrado) }
+  ${ mostrarGrafico1(problemasFiltrado) }
 </div>
