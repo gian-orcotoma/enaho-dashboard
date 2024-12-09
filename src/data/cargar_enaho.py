@@ -37,8 +37,7 @@ def cargar_enaho():
                             pass
                             # print(f"El archivo {file_path} no contiene las columnas requeridas y será ignorado.")
                     except Exception as e:
-                        pass
-                        # print(f"Error al leer el archivo {file_path}: {e}")
+                        sys.stderr.write(f"[cargar_enaho.py] ❌ Error leyendo: {os.path.join(folder_path, file_name)}")
             
             # Si hay DataFrames en la carpeta, combinarlos
             if folder_csvs:
