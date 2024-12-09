@@ -254,7 +254,7 @@ function mostrarGrafico6(filtroPeriodo) {
     color: {
       //type: "quantile",
       //n:/ 9,
-      scheme: "rdbu",
+      scheme: "brbg",
       legend: true,
       type: "linear",
       domain: [0,100]
