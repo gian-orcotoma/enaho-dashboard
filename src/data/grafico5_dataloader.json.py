@@ -1,9 +1,9 @@
 import pandas as pd
 import unicodedata
 
-archivo = "/Users/cynthiacevallos/Downloads/enaho-dashboard-main/datasets/Datacrim_Opinion_Gestion_Gobierno/Opinion_Gestion_Gob_Central.xls"
-archivo2 = "/Users/cynthiacevallos/Downloads/enaho-dashboard-main/datasets/Datacrim_Opinion_Gestion_Gobierno/Opinion_Gestion_Gob_Regional.xls"
-archivo3 = "/Users/cynthiacevallos/Downloads/enaho-dashboard-main/datasets/Datacrim_Opinion_Gestion_Gobierno/Opinion_Gestion_Gob_Local.xls"
+archivo = "=datasets/Datacrim_Opinion_Gestion_Gobierno/Opinion_Gestion_Gob_Central.xls"
+archivo2 = "datasets/Datacrim_Opinion_Gestion_Gobierno/Opinion_Gestion_Gob_Regional.xls"
+archivo3 = "datasets/Datacrim_Opinion_Gestion_Gobierno/Opinion_Gestion_Gob_Local.xls"
 
 
 def procesar_file(archivo):
