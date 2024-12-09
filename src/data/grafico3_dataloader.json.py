@@ -1,9 +1,9 @@
 import pandas as pd
 import unicodedata
 
-archivo = "/Users/cynthiacevallos/Downloads/enaho-dashboard-main/datasets/Datacrim_Corrupcion/P23.xls"
-archivo1 = "/Users/cynthiacevallos/Downloads/enaho-dashboard-main/datasets/Datacrim_Corrupcion/P23-Sexo.xls"
-archivo2 = "/Users/cynthiacevallos/Downloads/enaho-dashboard-main/datasets/Datacrim_Corrupcion/P23-Educacion.xls"
+archivo = "datasets/Datacrim_Corrupcion/P23.xls"
+archivo1 = "datasets/Datacrim_Corrupcion/P23-Sexo.xls"
+archivo2 = "datasets/Datacrim_Corrupcion/P23-Educacion.xls"
 
 try:
     with open(archivo, 'r', encoding='latin-1') as f:
