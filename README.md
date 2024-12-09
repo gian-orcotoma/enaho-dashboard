@@ -2,6 +2,35 @@
 
 Este proyecto desarrolla un dashboard interactivo utilizando Observable Framework para la visualización de indicadores clave del Módulo 85 de la Encuesta Nacional de Hogares (ENAHO). El dashboard permite explorar de manera dinámica los datos relacionados con gobernabilidad, democracia y transparencia en Perú.
 
+## **Como ver el dashboard**
+
+Puede ver el dashboard en funcionamiento aqui: https://inei-dashboard.observablehq.cloud/enaho-dashboard/
+
+## **Como utilizar este proyecto**
+
+Si lo que deseas es ejecutar el código fuente, necesitarás los siguientes requisitos instalados en tu computadora para asegurar la replicabilidad del proyecto.
+| Herramienta   | Versión   | Notas                   |
+|---------------|-----------|-------------------------|
+| Node          | 18.17.0   |                         |
+| npm           | 9.6.7     |                         |
+| Python        | 3.12.2    |                         |
+| pandas        | 2.2.3     | Librería de Python      |
+| numpy         | 2.1.3     | Librería de Python      |
+
+Esta es una aplicación de Observable Framework, así que una vez clonado el repositorio deberás instalar las dependencias requeridas, ejecuta:
+
+```bash
+npm install
+```
+Luego, para iniciar el servidor de vista previa local, ejecuta:
+
+```bash
+npm run dev
+```
+Luego visita http://localhost:3000 para previsualizar el dashboard.
+
+
+
 ## **Descripción**
 
 El Módulo de Gobernabilidad, Democracia y Transparencia de la ENAHO recoge información clave sobre la percepción ciudadana respecto a instituciones, corrupción, democracia, y otros aspectos críticos. Este proyecto busca:
@@ -49,29 +78,3 @@ El dashboard utiliza datos del Módulo 85 de la ENAHO (2007-2024) también datos
 - Emerson Jamil Quispe Goicochea  
 - Gian Carlo Orcotoma Mormontoy  
 
-## **Como ver el dashboard**
-
-Puede ver el dashboard en funcionamiento aqui: https://inei-dashboard.observablehq.cloud/enaho-dashboard/
-
-## **Como utilizar este proyecto**
-
-Si lo que deseas es ejecutar el código fuente, necesitarás los siguientes requisitos instalados en tu computadora para asegurar la replicabilidad del proyecto.
-| Herramienta   | Versión   | Notas                   |
-|---------------|-----------|-------------------------|
-| Node          | 18.17.0   |                         |
-| npm           | 9.6.7     |                         |
-| Python        | 3.12.2    |                         |
-| pandas        | 2.2.3     | Librería de Python      |
-| numpy         | 2.1.3     | Librería de Python      |
-
-Esta es una aplicación de Observable Framework, así que una vez clonado el repositorio deberás instalar las dependencias requeridas, ejecuta:
-
-```bash
-npm install
-```
-Luego, para iniciar el servidor de vista previa local, ejecuta:
-
-```bash
-npm run dev
-```
-Luego visita http://localhost:3000 para previsualizar el dashboard.
