@@ -55,7 +55,7 @@ Puede ver el dashboard en funcionamiento aqui: https://inei-dashboard.observable
 
 ## **Como utilizar este proyecto**
 
-Si lo que deseas es ejecutar el código fuente, necesitarás los siguientes requisitos instalados en tu computadora.
+Si lo que deseas es ejecutar el código fuente, necesitarás los siguientes requisitos instalados en tu computadora para asegurar la replicabilidad del proyecto.
 | Herramienta   | Versión   | Notas                   |
 |---------------|-----------|-------------------------|
 | Node          | 18.17.0   |                         |
