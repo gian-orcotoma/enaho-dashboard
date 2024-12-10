@@ -3,29 +3,29 @@ title: grafico2
 theme: air
 toc: false
 sql:
-  problemas: data/grafico2_dataloader.json
+  corrupcion_1: data/grafico2_dataloader.json
 ---
 
-```sql id=problemasFiltrado
-SELECT PERIODO_INICIO, PERIODO_FIN, PERIODO_SEMESTRE_MOVIL,Porcentaje_100,ZONA FROM problemas 
-WHERE PERIODO_SEMESTRE_MOVIL >= ${selector1} AND PERIODO_SEMESTRE_MOVIL <= ${selector2}
+```sql id=corrupcion_1Filtrado
+SELECT PERIODO_INICIO, PERIODO_FIN, PERIODO_SEMESTRE_MOVIL,Porcentaje_100,ZONA FROM corrupcion_1 
+WHERE PERIODO_SEMESTRE_MOVIL >= ${selector1_1} AND PERIODO_SEMESTRE_MOVIL <= ${selector2_1}
 ```
 
-```sql id=opciones
-   SELECT DISTINCT PERIODO_SEMESTRE_MOVIL FROM problemas 
+```sql id=opciones_corrupcion_1
+   SELECT DISTINCT PERIODO_SEMESTRE_MOVIL FROM corrupcion_1 
 ```
 
 ```js
-const opciones_1 = JSON.parse(opciones);
-const selectOptions_1 = opciones_1.map(d => d.PERIODO_SEMESTRE_MOVIL); 
-const selectElement_input = Inputs.select(selectOptions_1, { label: "Desde", value: '2022-04 a 2022-09' });
-const selector1 = Generators.input(selectElement_input);
+const opciones_corrupcion_1_1 = JSON.parse(opciones_corrupcion_1);
+const selectOptions_1_2 = opciones_corrupcion_1_1.map(d => d.PERIODO_SEMESTRE_MOVIL); 
+const selectElement_input_1 = Inputs.select(selectOptions_1_2, { label: "Desde", value: '2022-04 a 2022-09' });
+const selector1_1 = Generators.input(selectElement_input_1);
 
-const selectOptions_2 = opciones_1.map(d => d.PERIODO_SEMESTRE_MOVIL); 
-const selectElement2_input = Inputs.select(selectOptions_1, { label: "Hasta", value: '2023-07 a 2023-12' });
-const selector2 = Generators.input(selectElement2_input);
+const selectOptions_2_1 = opciones_corrupcion_1_1.map(d => d.PERIODO_SEMESTRE_MOVIL); 
+const selectElement2_input_1 = Inputs.select(selectOptions_1_2, { label: "Hasta", value: '2023-07 a 2023-12' });
+const selector2_1 = Generators.input(selectElement2_input_1);
 
-function mostrarGrafico(data){
+function mostrarGrafico2_1(data){
     return Plot.plot({
         marginBottom: 120,
         marginRight: 60,
@@ -35,7 +35,7 @@ function mostrarGrafico(data){
         color: {legend: true,},
         marks: [
             Plot.ruleY([0]),
-            Plot.lineY(data, {x: "PERIODO_SEMESTRE_MOVIL", y: "Porcentaje_100", stroke:"ZONA", tip:true}),
+            Plot.lineY(data, {x: "PERIODO_SEMESTRE_MOVIL", y: "Porcentaje_100", stroke:"ZONA", tip:true, strokeWidth: 3, curve: "monotone-x"}),
             Plot.dot(data, { x: "PERIODO_SEMESTRE_MOVIL", y: "Porcentaje_100", fill: "ZONA" }),
             Plot.text(data, {
                 x: "PERIODO_SEMESTRE_MOVIL",
@@ -55,9 +55,9 @@ function mostrarGrafico(data){
     <h2>GRÁFICO N° 02 <br> PERÚ: CORRUPCION, SEGUN AREA DE RESIDENCIA</h2>
     <h3>Semestre Movil (Porcentaje)</h3><br>
     <h4>SI LE SOLICITARON "UN PAGO EXTRA"</h4>
-    ${view(selectElement_input)}
-    ${view(selectElement2_input)}
-    ${mostrarGrafico(problemasFiltrado)}
+    ${view(selectElement_input_1)}
+    ${view(selectElement2_input_1)}
+    ${mostrarGrafico2_1(corrupcion_1Filtrado)}
     <h3>Fuente: Instituto Nacional de Estadistica e Informatica. 
     ENAHO (Modulo: Gobernabilidad, Transparencia y Democracia)</h3>
 </div>

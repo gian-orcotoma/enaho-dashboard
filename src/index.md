@@ -2,6 +2,7 @@
 toc: false
 sql:
   problemas: data/grafico1_dataloader.json
+  corrupcion_1: data/grafico2_dataloader.json
   corrupcion: data/grafico3_dataloader.json
   gestion_gobierno: data/grafico5_dataloader.json
   entidades: data/grafico4_dataloader.json
@@ -77,8 +78,10 @@ SELECT * FROM(
 
 ```js
 // Inputs
-const [{max_year}] = await sql`select max(AÑO) as max_year from problemas`
+let [{max_year}] = await sql`select max(AÑO) as max_year from problemas`
+max_year = 2023
 const [{min_year}] = await sql`select min(AÑO) as min_year from problemas`
+
 
 const year_inicio_input = Inputs.range([min_year, max_year], {
   step: 1,
@@ -104,7 +107,7 @@ const movil_meses_input = Inputs.select(
 const movil_meses = Generators.input(movil_meses_input);
 
 //  Grafico
-function mostrarGrafico1(data) {
+function mostrarGrafico1(data, width) {
   return Plot.plot({
     marginBottom: 75,
     marginLeft: 45,
@@ -138,7 +141,7 @@ function mostrarGrafico1(data) {
 
   <!-- Grafico -->
   <div>
-  ${ display(mostrarGrafico1(problemasFiltrado)) }
+  ${ resize(w=>mostrarGrafico1(problemasFiltrado,w)) }
   </div>
 
   <h3>Fuente: Instituto Nacional de Estadistica e Informatica. 
@@ -146,7 +149,7 @@ function mostrarGrafico1(data) {
 </div>
 
 
-## 3. La corrupción, según características demográficas
+## 2 y 3. La corrupción, según características demográficas
 
 ```sql id=corrupcion
    SELECT * FROM corrupcion 
@@ -197,7 +200,7 @@ const selectElement_input6 = Inputs.select(selectOptions5, { label: "Segundo Per
 const selector6 = Generators.input(selectElement_input6);
 
 
-function mostrarGrafico(data,opciones,opciones4){
+function mostrarGrafico2_2(data,opciones,opciones4, width){
     //const filteredData = data.filter(d => d.VARIABLE === "ZONA");
     const datos = JSON.parse(data);
     const filteredData = datos.filter(d => d.VARIABLE === "ZONA");
@@ -205,6 +208,7 @@ function mostrarGrafico(data,opciones,opciones4){
     const filteredData3 = datos.filter(d => d.VARIABLE === "NIVEL EDUCATIVO");
     const ordenFx = ["URBANO","RURAL","HOMBRE","MUJER","PRIMARIA","SECUNDARIA","SUPERIOR"]
     return Plot.plot({
+        width: width,
         x: {axis:null, tickRotate: 0},            
         y: {grid: true}, 
         color: { legend: true, scheme:"ylgnbu"},
@@ -273,29 +277,79 @@ function mostrarGrafico2(data,opciones2,opciones3){
 }
 ```
 
-<div class="card" >
-  <h2>GRÁFICO N° 03 <br> PERÚ: CORRUPCIÓN, SEGÚN CARACTERÍSTICAS DEMOGRÁFICAS</h2>
-  <h3>Semestre Movil (Porcentaje)</h3><br>
-  <h4>SI LE SOLICITARON "UN PAGO EXTRA"</h4>
+```sql id=corrupcion_1Filtrado
+SELECT PERIODO_INICIO, PERIODO_FIN, PERIODO_SEMESTRE_MOVIL,Porcentaje_100,ZONA FROM corrupcion_1 
+WHERE PERIODO_SEMESTRE_MOVIL >= ${selector1_1} AND PERIODO_SEMESTRE_MOVIL <= ${selector2_1}
+```
 
-  ${view(selectElement_input)}
-  ${view(selectElement2_input)}
-  
-  <div>
-  ${mostrarGrafico(corrupcion,opciones)}
+```sql id=opciones_corrupcion_1
+   SELECT DISTINCT PERIODO_SEMESTRE_MOVIL FROM corrupcion_1 
+```
+
+```js
+const opciones_corrupcion_1_1 = JSON.parse(opciones_corrupcion_1);
+const selectOptions_1_2 = opciones_corrupcion_1_1.map(d => d.PERIODO_SEMESTRE_MOVIL); 
+const selectElement_input_1 = Inputs.select(selectOptions_1_2, { label: "Desde", value: '2022-04 a 2022-09' });
+const selector1_1 = Generators.input(selectElement_input_1);
+
+const selectOptions_2_1 = opciones_corrupcion_1_1.map(d => d.PERIODO_SEMESTRE_MOVIL); 
+const selectElement2_input_1 = Inputs.select(selectOptions_1_2, { label: "Hasta", value: '2023-07 a 2023-12' });
+const selector2_1 = Generators.input(selectElement2_input_1);
+
+function mostrarGrafico2_1(data, width){
+    return Plot.plot({
+        marginBottom: 100,
+        marginRight: 60,
+        width: width,
+        x: {tickRotate: -45, label:'Periodo', },
+        y: {grid: true, label: "Porcentaje"},
+        color: {legend: true,},
+        marks: [
+            Plot.ruleY([0]),
+            Plot.lineY(data, {x: "PERIODO_SEMESTRE_MOVIL", y: "Porcentaje_100", stroke:"ZONA", tip:true, strokeWidth: 3, curve: "monotone-x"}),
+            Plot.dot(data, { x: "PERIODO_SEMESTRE_MOVIL", y: "Porcentaje_100", fill: "ZONA" }),
+            Plot.text(data, {
+                x: "PERIODO_SEMESTRE_MOVIL",
+                y: "Porcentaje_100",
+                text: d => d.Porcentaje_100,
+                dx: 9, // Desplazamiento en X
+                dy: -9, // Desplazamiento en Y
+                fill: "ZONA",
+                fontSize: 10
+            }),
+            Plot.text(data, Plot.selectLast({x: "PERIODO_SEMESTRE_MOVIL", y: "Porcentaje_100", z: "ZONA", text: "ZONA", textAnchor: "start", dx:7, dy: 0, fill: "ZONA", textOverflow:'ellipsis', lineWidth:8}))
+        ],
+    })
+}
+```
+
+<div class="grid grid-cols-2">
+  <div class="card">
+      <h2>GRÁFICO N° 02 <br> PERÚ: CORRUPCION, SEGUN AREA DE RESIDENCIA</h2>
+      <h3>Semestre Movil (Porcentaje)</h3><br>
+      <h4>SI LE SOLICITARON "UN PAGO EXTRA"</h4>
+      ${view(selectElement_input_1)}
+      ${view(selectElement2_input_1)}
+      ${ resize(width=>mostrarGrafico2_1(corrupcion_1Filtrado, width)) }
+      <h3>Fuente: Instituto Nacional de Estadistica e Informatica. 
+      ENAHO (Modulo: Gobernabilidad, Transparencia y Democracia)</h3>
   </div>
-  
-  <h3>Fuente: Instituto Nacional de Estadistica e Informatica. 
-  ENAHO (Modulo: Gobernabilidad, Transparencia y Democracia)</h3>
+
+
+  <div class="card">
+    <h2>GRÁFICO N° 03 <br> PERÚ: CORRUPCIÓN, SEGÚN CARACTERÍSTICAS DEMOGRÁFICAS</h2>
+    <h3>Semestre Movil (Porcentaje)</h3><br>
+    <h4>SI LE SOLICITARON "UN PAGO EXTRA"</h4>
+${view(selectElement_input)}
+${view(selectElement2_input)}
+    <div>
+${ resize(width=>mostrarGrafico2_2(corrupcion,opciones,null,width)) }
+    </div>
+    <h3>Fuente: Instituto Nacional de Estadistica e Informatica. 
+    ENAHO (Modulo: Gobernabilidad, Transparencia y Democracia)</h3>
+  </div>
+
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -413,7 +467,7 @@ const db_democracia_elec = await FileAttachment("data/grafico6_dataloader.json")
 
 
 // Grafico
-function mostrarGrafico6(filtroPeriodo) {
+function mostrarGrafico6(filtroPeriodo, width) {
 
   // Filtros
   let departamentosGeoJSON = JSON.parse(JSON.stringify(departamentos))
@@ -434,6 +488,7 @@ function mostrarGrafico6(filtroPeriodo) {
   }
 
   return Plot.plot({
+    width: width,
     projection: { type: "mercator", domain: departamentos },
     color: {
       //type: "quantile",
@@ -483,7 +538,7 @@ L.geoJson(departamentos).addTo(map);
   <h3>Semestre: ${movil_semestre_elec_democracia}</h3>
 
 ${ view(movil_semestre_elec_democracia_input) }
-${ display( mostrarGrafico6( movil_semestre_elec_democracia ) ) }
+${ resize(w=>mostrarGrafico6( movil_semestre_elec_democracia, w ) ) }
 
   <h3>Fuente: Instituto Nacional de Estadistica e Informatica. 
     ENAHO (Modulo: Gobernabilidad, Transparencia y Democracia)</h3>
