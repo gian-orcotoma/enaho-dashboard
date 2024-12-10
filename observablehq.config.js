@@ -37,6 +37,6 @@ export default {
   // preserveIndex: false, // drop /index from URLs
 
   //interpreters: {
-  //    ".py": ["C:/Users/gianc/anaconda3/envs/web/python.exe"],
-  //  }
+  //  ".py": ["C:/Users/gianc/anaconda3/envs/web/python.exe"],
+  //}
 };

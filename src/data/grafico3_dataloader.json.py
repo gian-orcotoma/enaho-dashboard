@@ -1,5 +1,6 @@
 import pandas as pd
 import unicodedata
+import sys
 
 archivo = "datasets/Datacrim_Corrupcion/P23.xls"
 archivo1 = "datasets/Datacrim_Corrupcion/P23-Sexo.xls"
@@ -12,6 +13,7 @@ try:
     df = tablas[0]
     resultado = df
 except Exception as e:
+    sys.stderr.write(e)
     resultado = str(e)
 
 def remove_tildes(text):

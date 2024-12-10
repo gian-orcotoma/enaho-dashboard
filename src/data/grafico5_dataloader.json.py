@@ -1,7 +1,8 @@
 import pandas as pd
 import unicodedata
+import sys
 
-archivo = "=datasets/Datacrim_Opinion_Gestion_Gobierno/Opinion_Gestion_Gob_Central.xls"
+archivo = "datasets/Datacrim_Opinion_Gestion_Gobierno/Opinion_Gestion_Gob_Central.xls"
 archivo2 = "datasets/Datacrim_Opinion_Gestion_Gobierno/Opinion_Gestion_Gob_Regional.xls"
 archivo3 = "datasets/Datacrim_Opinion_Gestion_Gobierno/Opinion_Gestion_Gob_Local.xls"
 
@@ -15,6 +16,8 @@ def procesar_file(archivo):
       resultado = df
       return resultado
   except Exception as e:
+      sys.stderr.write(e)
+      sys.stderr.write(archivo)
       resultado = str(e)
       return resultado
   
