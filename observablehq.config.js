@@ -26,7 +26,7 @@ export default {
   // theme: "default", // try "light", "dark", "slate", etc.
   // header: "", // what to show in the header (HTML)
   footer: "Hecho por el Grupo 4 en el PEU-CD INEI", // what to show in the footer (HTML)
-  sidebar: false, // whether to show the sidebar
+  sidebar: true, // whether to show the sidebar
   toc: false, // whether to show the table of contents
   // pager: true, // whether to show previous & next links in the footer
   // output: "dist", // path to the output root for build
@@ -37,6 +37,6 @@ export default {
   // preserveIndex: false, // drop /index from URLs
 
   //interpreters: {
-  //  ".py": ["C:/Users/gianc/anaconda3/envs/web/python.exe"],
-  //}
+  //    ".py": ["C:/Users/gianc/anaconda3/envs/web/python.exe"],
+  //  }
 };

@@ -17,7 +17,12 @@ sql:
 
 
 <!-- GRÁFICO N° 01PERÚ: PRINCIPALES PROBLEMAS DEL PAÍS -->
-```sql id=problemasFiltrado
+
+```sql
+SELECT * FROM problemas
+```
+
+```sql
 SELECT * FROM(
   SELECT * FROM (
     SELECT
@@ -26,11 +31,12 @@ SELECT * FROM(
       ,FECHA
       ,PREGUNTA_NOM
       ,PREGUNTA_COD
-      ,AVG(VALOR) OVER (
+      --,FACTOR07
+      ,SUM(VALOR) OVER (
         PARTITION BY PREGUNTA_COD
         ORDER BY FECHA
         ROWS BETWEEN ${movil_meses-1} PRECEDING AND CURRENT ROW
-      ) AS PROMEDIO_MOVIL
+      ) / FACTOR07 AS PROMEDIO_MOVIL
     FROM problemas
   )
   WHERE
@@ -47,11 +53,11 @@ SELECT * FROM(
       ,FECHA
       ,PREGUNTA_NOM
       ,PREGUNTA_COD
-      ,AVG(VALOR) OVER (
+      ,SUM(VALOR) OVER (
         PARTITION BY PREGUNTA_COD
         ORDER BY FECHA
         ROWS BETWEEN ${movil_meses-1} PRECEDING AND CURRENT ROW
-      ) AS PROMEDIO_MOVIL
+      ) / FACTOR07 AS PROMEDIO_MOVIL
     FROM problemas
   )
   WHERE
@@ -59,9 +65,75 @@ SELECT * FROM(
   ORDER BY PROMEDIO_MOVIL DESC
   LIMIT 7
 ) As Toplist ON Prob.PREGUNTA_COD = Toplist.PREGUNTA_COD
-
-
 ```
+
+
+
+
+
+
+
+
+
+```sql id=problemasFiltrado
+SELECT * FROM(
+  SELECT * FROM (
+    SELECT
+      VALOR
+      ,AÑO
+      ,FECHA
+      ,PREGUNTA_NOM
+      ,PREGUNTA_COD
+      --,FACTOR07
+      ,SUM(VALOR) OVER (
+        PARTITION BY PREGUNTA_COD
+        ORDER BY FECHA
+        ROWS BETWEEN ${movil_meses-1} PRECEDING AND CURRENT ROW
+      ) / SUM(FACTOR07) OVER (
+        PARTITION BY PREGUNTA_COD
+        ORDER BY FECHA
+        ROWS BETWEEN ${movil_meses-1} PRECEDING AND CURRENT ROW
+      ) * 100
+       AS PROMEDIO_MOVIL
+    FROM problemas
+  )
+  WHERE
+    AÑO >= ${year_inicio}
+    AND AÑO <= ${year_fin}
+) AS Prob INNER JOIN (
+  -- Seleccionar TOP del ultimo semestre
+  SELECT
+    PREGUNTA_COD
+  FROM (
+    SELECT
+      VALOR
+      ,AÑO
+      ,FECHA
+      ,PREGUNTA_NOM
+      ,PREGUNTA_COD
+      ,SUM(VALOR) OVER (
+        PARTITION BY PREGUNTA_COD
+        ORDER BY FECHA
+        ROWS BETWEEN ${movil_meses-1} PRECEDING AND CURRENT ROW
+      ) / SUM(FACTOR07) OVER (
+        PARTITION BY PREGUNTA_COD
+        ORDER BY FECHA
+        ROWS BETWEEN ${movil_meses-1} PRECEDING AND CURRENT ROW
+      ) * 100
+       AS PROMEDIO_MOVIL
+    FROM problemas
+  )
+  WHERE
+    FECHA == CONCAT(CAST(${year_fin} AS INT), '-12')
+  ORDER BY PROMEDIO_MOVIL DESC
+  LIMIT 7
+) As Toplist ON Prob.PREGUNTA_COD = Toplist.PREGUNTA_COD
+```
+
+
+
+
+
 
 ```js
 // Inputs
@@ -95,6 +167,7 @@ const movil_meses = Generators.input(movil_meses_input);
 function mostrarGrafico1(data) {
   return Plot.plot({
     marginBottom: 75,
+    marginLeft: 45,
     marginRight: 65,
     width: width,
     x: {tickRotate: -90},
@@ -294,17 +367,14 @@ L.geoJson(departamentos).addTo(map);
 ```
 
 ## 6. ¿La democracia sirve para elegir autoridades?
-<div class="grid grid-cols-2">
 
-  <div class="card">
-    <h2>GRÁFICO N° 6 <br> PERÚ:¿LA DEMOCRACIA SIRVE PARA ELEGIR AUTORIDADES?</h2>
-    <h3>(Porcentaje)</h3>
-    <h3>Semestre: ${movil_semestre_elec_democracia}</h3>
+
+<div class="card">
+  <h2>GRÁFICO N° 6 <br> PERÚ:¿LA DEMOCRACIA SIRVE PARA ELEGIR AUTORIDADES?</h2>
+  <h3>(Porcentaje)</h3>
+  <h3>Semestre: ${movil_semestre_elec_democracia}</h3>
 
 ${ view(movil_semestre_elec_democracia_input) }
 ${ display( mostrarGrafico6( movil_semestre_elec_democracia ) ) }
 
-  </div>
 </div>
-
-
